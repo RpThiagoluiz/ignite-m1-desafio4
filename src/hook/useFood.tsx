@@ -9,24 +9,24 @@ import {
 import api from "../services/api";
 
 interface FoodContextData {
-  foods: IFoodPlate[];
-  editingFood: IFoodPlate;
+  foods: FoodData[];
+  editingFood: FoodData;
   modalOpen: boolean;
   editModalOpen: boolean;
 
-  handleAddFood(food: Omit<IFoodPlate, "id" | "available">): void;
-  handleUpdateFood(food: Omit<IFoodPlate, "id" | "available">): void;
+  handleAddFood(food: Omit<FoodData, "id" | "available">): void;
+  handleUpdateFood(food: Omit<FoodData, "id" | "available">): void;
   handleDeleteFood(id: number): void;
   toggleModal(): void;
   toggleEditModal(): void;
-  handleEditFood(food: IFoodPlate): void;
+  handleEditFood(food: FoodData): void;
 }
 
 interface FoodProviderProps {
   children: ReactNode;
 }
 
-interface IFoodPlate {
+interface FoodData {
   id: number;
   name: string;
   image: string;
@@ -38,8 +38,8 @@ interface IFoodPlate {
 const FoodContext = createContext<FoodContextData>({} as FoodContextData);
 
 const FoodProvider = ({ children }: FoodProviderProps) => {
-  const [foods, setFoods] = useState<IFoodPlate[]>([]);
-  const [editingFood, setEditingFood] = useState<IFoodPlate>({} as IFoodPlate);
+  const [foods, setFoods] = useState<FoodData[]>([]);
+  const [editingFood, setEditingFood] = useState<FoodData>({} as FoodData);
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
 
@@ -51,9 +51,9 @@ const FoodProvider = ({ children }: FoodProviderProps) => {
     loadFoods();
   }, []);
 
-  async function handleAddFood(food: Omit<IFoodPlate, "id" | "available">) {
+  async function handleAddFood(food: Omit<FoodData, "id" | "available">) {
     try {
-      const newFood: IFoodPlate = {
+      const newFood: FoodData = {
         id: foods[foods.length - 1] ? foods[foods.length - 1].id + 1 : 1,
         name: food.name,
         image: food.image,
@@ -68,7 +68,7 @@ const FoodProvider = ({ children }: FoodProviderProps) => {
     }
   }
 
-  async function handleUpdateFood(food: Omit<IFoodPlate, "id" | "available">) {
+  async function handleUpdateFood(food: Omit<FoodData, "id" | "available">) {
     const newFoodList = foods.map((currentFood) => {
       if (currentFood.id !== editingFood.id) {
         return currentFood;
@@ -101,7 +101,7 @@ const FoodProvider = ({ children }: FoodProviderProps) => {
     setEditModalOpen(!editModalOpen);
   }
 
-  function handleEditFood(food: IFoodPlate) {
+  function handleEditFood(food: FoodData) {
     setEditingFood(food);
     toggleEditModal();
   }

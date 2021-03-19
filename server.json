@@ -39,14 +39,6 @@
       "description": "Mandioca",
       "available": true,
       "id": 5
-    },
-    {
-      "id": 6,
-      "name": "Ratatuie",
-      "image": "https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food1.png",
-      "price": "9.99",
-      "description": "rato",
-      "available": true
     }
   ]
 }

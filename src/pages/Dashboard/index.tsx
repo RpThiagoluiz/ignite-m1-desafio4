@@ -9,6 +9,7 @@ import { ModalAddFood } from "../../components/ModalAddFood";
 import { ModalEditFood } from "../../components/ModalEditFood";
 
 import { FoodsContainer } from "./styles";
+import { useFood } from "../../hook/useFood";
 
 interface FoodData {
   id: number;
@@ -20,24 +21,33 @@ interface FoodData {
 }
 
 export const Dashboard = () => {
+  // const {
+  //   editModalOpen,
+  //   editingFood,
+  //   foods,
+  //   handleAddFood,
+  //   handleDeleteFood,
+  //   handleEditFood,
+  //   handleUpdateFood,
+  //   modalOpen,
+  //   toggleEditModal,
+  //   toggleModal,
+  // } = useFood();
+
   const [foods, setFoods] = useState<FoodData[]>([]);
   const [editingFood, setEditingFood] = useState<FoodData>({} as FoodData);
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
 
   useEffect(() => {
-    async function loadFoods(): Promise<void> {
+    async function loadFoods() {
       const foodsList = await api.get("/foods");
-
       setFoods(foodsList.data);
     }
-
     loadFoods();
   }, []);
 
-  async function handleAddFood(
-    food: Omit<FoodData, "id" | "available">
-  ): Promise<void> {
+  async function handleAddFood(food: Omit<FoodData, "id" | "available">) {
     try {
       const newFood: FoodData = {
         id: foods[foods.length - 1] ? foods[foods.length - 1].id + 1 : 1,
@@ -54,9 +64,7 @@ export const Dashboard = () => {
     }
   }
 
-  async function handleUpdateFood(
-    food: Omit<FoodData, "id" | "available">
-  ): Promise<void> {
+  async function handleUpdateFood(food: Omit<FoodData, "id" | "available">) {
     const newFoodList = foods.map((currentFood) => {
       if (currentFood.id !== editingFood.id) {
         return currentFood;
@@ -75,21 +83,21 @@ export const Dashboard = () => {
     });
   }
 
-  async function handleDeleteFood(id: number): Promise<void> {
+  async function handleDeleteFood(id: number) {
     await api.delete(`/foods/${id}`);
     const newFoodList = foods.filter((currentFood) => currentFood.id !== id);
     setFoods(newFoodList);
   }
 
-  function toggleModal(): void {
+  function toggleModal() {
     setModalOpen(!modalOpen);
   }
 
-  function toggleEditModal(): void {
+  function toggleEditModal() {
     setEditModalOpen(!editModalOpen);
   }
 
-  function handleEditFood(food: FoodData): void {
+  function handleEditFood(food: FoodData) {
     setEditingFood(food);
     toggleEditModal();
   }
